@@ -1,0 +1,64 @@
+version: '3'
+
+networks:
+    shared:
+        external: false
+
+services:
+    mysql_db:
+        image: mariadb
+        container_name: mysql_db
+        environment:
+            MYSQL_ROOT_PASSWORD: DB_ROOT_PASS
+            MYSQL_DATABASE: DB_NAME
+            MYSQL_USER: DB_USER
+            MYSQL_PASSWORD: DB_PASS
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - shared
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: pma
+        links:
+            - mysql_db
+        environment:
+            PMA_HOST: mysql_db
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+            MAX_EXECUTION_TIME: 140000
+        restart: always
+        ports:
+            - "1550:80"
+        networks:
+            - shared
+
+    php_backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: php_backend
+        command: "bash /app/deploy/run.sh >> run_log.log"
+        volumes:
+            - ./:/app
+        depends_on:
+            - mysql_db
+        networks:
+            - shared
+
+    nginx:
+        image: nginx:1.14.2
+        ports:
+            - "6006:80"
+        volumes:
+            - "./deploy/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf"
+            - "./deploy/nginx/nginx.conf:/etc/nginx/conf.d/default.conf"
+            - "./:/app"
+        links:
+            - php_backend
+        networks:
+            - shared
+
+volumes:
+    dbdata:
