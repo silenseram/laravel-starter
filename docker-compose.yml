@@ -39,7 +39,7 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: php_backend
-        command: "bash /app/deploy/run.sh >> run_log.log"
+        command: "bash /app/deploy/run.sh"
         volumes:
             - ./:/app
         depends_on:
@@ -53,7 +53,7 @@ services:
             - "6006:80"
         volumes:
             - "./deploy/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf"
-            - "./deploy/nginx/nginx.conf:/etc/nginx/conf.d/default.conf"
+            - "./deploy/nginx/site.conf:/etc/nginx/conf.d/default.conf"
             - "./:/app"
         links:
             - php_backend
