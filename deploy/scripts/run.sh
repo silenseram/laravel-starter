@@ -4,7 +4,7 @@ echo "running composer";
 composer dump-autoload;
 composer install --working-dir=/app;
 
-bash /app/deploy/wait_for.sh mysql_db:3306 -t 0 -s --;
+bash /app/deploy/scripts/wait_for.sh mysql_db:3306 -t 0 -s --;
 echo "database is ready";
 
 echo "setting files permissions";

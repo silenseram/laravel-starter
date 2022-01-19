@@ -9,10 +9,10 @@ services:
         image: mariadb
         container_name: mysql_db
         environment:
-            MYSQL_ROOT_PASSWORD: DB_ROOT_PASS
-            MYSQL_DATABASE: DB_NAME
-            MYSQL_USER: DB_USER
-            MYSQL_PASSWORD: DB_PASS
+            MYSQL_ROOT_PASSWORD: $DB_ROOT_PASS
+            MYSQL_DATABASE: $DB_DATABASE
+            MYSQL_USER: $DB_USERNAME
+            MYSQL_PASSWORD: $DB_PASSWORD
         volumes:
             - dbdata:/var/lib/mysql
         networks:
@@ -39,7 +39,7 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: php_backend
-        command: "bash /app/deploy/run.sh"
+        command: "bash /app/deploy/scripts/run.sh"
         volumes:
             - ./:/app
         depends_on:
