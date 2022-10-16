@@ -5,39 +5,38 @@ networks:
         external: false
 
 services:
-#    postgres:
-#        image: postgres
-#        container_name: postgres
-#        environment:
-#            POSTGRES_USER: ${POSTGRES_USER:-postgres}
-#            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-#            PGDATA: /data/postgres
-#        volumes:
-#            - postgres:/data/postgres
-#        networks:
-#            - internal
+    postgres:
+        image: postgres
+        container_name: postgres
+        environment:
+            POSTGRES_USER: ${DB_USERNAME:-postgres}
+            POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+            PGDATA: /data/postgres
+        volumes:
+            - postgres:/data/postgres
+        networks:
+            - shared
 
-#    pgadmin:
-#        container_name: pgadmin
-#        image: dpage/pgadmin4
-#        environment:
-#            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-#            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-#            PGADMIN_CONFIG_SERVER_MODE: 'False'
-#        volumes:
-#            - pgadmin:/var/lib/pgadmin
-#        ports:
-#            - "${PGADMIN_PORT:-5050}:80"
-#        networks:
-#            - internal
-#        restart: unless-stopped
+    pgadmin:
+        container_name: pgadmin
+        image: dpage/pgadmin4
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+            PGADMIN_CONFIG_SERVER_MODE: 'False'
+        volumes:
+            - pgadmin:/var/lib/pgadmin
+        ports:
+            - "${PGADMIN_PORT:-5050}:80"
+        networks:
+            - shared
+        restart: unless-stopped
 
     starter_php_backend:
         build:
             context: .
             dockerfile: Dockerfile
         container_name: starter_php_backend
-#        command: "sleep 99999999"
         command: "bash /app/deploy/scripts/run.sh"
         volumes:
             - ./:/app
