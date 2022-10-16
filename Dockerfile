@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 WORKDIR /app
 VOLUME ["/app", "/etc/supervisor/conf.d/laravel-queue.conf:delegated", "/usr/local/etc/php-fpm.d/php-fpm.conf:delegated"]
@@ -22,8 +22,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install soap zip gmp gd pdo_mysql opcache
 RUN docker-php-ext-enable soap gmp zip gd
-
-RUN chown -R www-data:www-data /app
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
