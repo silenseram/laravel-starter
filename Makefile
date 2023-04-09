@@ -11,4 +11,4 @@ init:
 	echo "UID=$$(id -u)" >> .env
 
 phpsh:
-	docker compose exec starter_php_backend bash
+	docker compose exec sphp bash
